@@ -4,6 +4,8 @@ import { PlanCard } from "@/components/PlanCard";
 import { TrainerCard } from "@/components/TrainerCard";
 import { TestimonialCard } from "@/components/TestimonialCard";
 
+export const dynamic = "force-dynamic";
+
 const plans = [
   {
     name: "Starter",
@@ -71,7 +73,18 @@ const metrics = [
   { value: "40+", label: "Weekly classes" }
 ];
 
-export default function HomePage() {
+async function getHomePageData() {
+  return {
+    metrics,
+    plans,
+    trainers,
+    testimonials
+  };
+}
+
+export default async function HomePage() {
+  const homePageData = await getHomePageData();
+
   return (
     <main className="page-shell">
       <Header />
@@ -93,7 +106,7 @@ export default function HomePage() {
             </a>
           </div>
           <div className="metric-row">
-            {metrics.map((metric) => (
+            {homePageData.metrics.map((metric) => (
               <div key={metric.label} className="metric-card">
                 <strong>{metric.value}</strong>
                 <span>{metric.label}</span>
@@ -135,7 +148,7 @@ export default function HomePage() {
           description="From first-timers to all-in athletes, each membership keeps the path clear and the experience focused."
         />
         <div className="card-grid plan-grid">
-          {plans.map((plan) => (
+          {homePageData.plans.map((plan) => (
             <PlanCard key={plan.name} {...plan} />
           ))}
         </div>
@@ -148,7 +161,7 @@ export default function HomePage() {
           description="Every coach brings a different training lens so members can find structure that actually fits."
         />
         <div className="card-grid trainer-grid">
-          {trainers.map((trainer) => (
+          {homePageData.trainers.map((trainer) => (
             <TrainerCard key={trainer.name} {...trainer} />
           ))}
         </div>
@@ -161,7 +174,7 @@ export default function HomePage() {
           description="The strongest signal is consistency. These stories reflect the environment, support, and pace members feel every week."
         />
         <div className="card-grid testimonial-grid">
-          {testimonials.map((testimonial) => (
+          {homePageData.testimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.name} {...testimonial} />
           ))}
         </div>
